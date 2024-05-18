@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dementia Prediction</title>
+  </head>
+  <body>
+    <h1>Dementia Prediction</h1>
+    <form id="prediction-form">
+      <label for="index">Index:</label>
+      <input type="text" id="index" name="index" required /><br /><br />
+
+      <label for="visit">Visit:</label>
+      <input type="text" id="visit" name="visit" required /><br /><br />
+
+      <label for="m_r_delay">M/R Delay:</label>
+      <input type="text" id="m_r_delay" name="m_r_delay" required /><br /><br />
+
+      <label for="m_f">M/F:</label>
+      <input type="text" id="m_f" name="m_f" required /><br /><br />
+
+      <label for="hand">Hand:</label>
+      <input type="text" id="hand" name="hand" required /><br /><br />
+
+      <label for="age">Age:</label>
+      <input type="text" id="age" name="age" required /><br /><br />
+
+      <label for="educ">EDUC:</label>
+      <input type="text" id="educ" name="educ" required /><br /><br />
+
+      <label for="ses">SES:</label>
+      <input type="text" id="ses" name="ses" required /><br /><br />
+
+      <label for="mmse">MMSE:</label>
+      <input type="text" id="mmse" name="mmse" required /><br /><br />
+
+      <label for="cdr">CDR:</label>
+      <input type="text" id="cdr" name="cdr" required /><br /><br />
+
+      <label for="etiv">eTIV:</label>
+      <input type="text" id="etiv" name="etiv" required /><br /><br />
+
+      <label for="nwbv">nWBV:</label>
+      <input type="text" id="nwbv" name="nwbv" required /><br /><br />
+
+      <button type="submit">Predict</button>
+    </form>
+    <div id="prediction-result"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        $("#prediction-form").on("submit", function (event) {
+          event.preventDefault();
+
+          let formData = {
+            index: $("#index").val(),
+            visit: $("#visit").val(),
+            m_r_delay: $("#m_r_delay").val(),
+            m_f: $("#m_f").val(),
+            hand: $("#hand").val(),
+            age: $("#age").val(),
+            educ: $("#educ").val(),
+            ses: $("#ses").val(),
+            mmse: $("#mmse").val(),
+            cdr: $("#cdr").val(),
+            etiv: $("#etiv").val(),
+            nwbv: $("#nwbv").val(),
+          };
+
+          console.log("Form Data: ", formData); // Log the form data to check its structure
+
+          $.ajax({
+            type: "POST",
+            url: "/predict_api",
+            data: JSON.stringify({ data: formData }),
+            contentType: "application/json",
+            success: function (data) {
+              $("#prediction-result").text(
+                "The Dementia Prediction is " + data
+              );
+            },
+            error: function (xhr, status, error) {
+              console.log("AJAX error: ", status, error);
+              console.log("Response text: ", xhr.responseText);
+              $("#prediction-result").text("Error occurred");
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
